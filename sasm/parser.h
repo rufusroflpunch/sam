@@ -28,12 +28,15 @@ bool parse(std::istream &istr, Sam::VM &vm, Error_State &err)
   err.line_no = 1;
   Token tok = get_tok(istr);                    // Get initial token
   
+  // While there are still potential tokens
   while (istr.good())
   {
+    // If the token is an identifier, find out which identifier it is
     if (tok.type == Token::TOK_IDENT)
     {
       if (tok.str_value == "push")
       {
+        // Make sure next token is an integer or char
         Token next_tok = get_tok(istr);
         if (next_tok.type != Token::TOK_INT && next_tok.type != Token::TOK_CHAR)
         {
@@ -42,6 +45,94 @@ bool parse(std::istream &istr, Sam::VM &vm, Error_State &err)
           return false;
         }
         else vm.push(next_tok.value);
+      }
+      else if (tok.str_value == "jge")
+      {
+        Token cmp_tok = get_tok(istr);
+        Token addr_tok = get_tok(istr);
+        
+        // If the first argument isn't an int or char, and the second argument isn't an int
+        if ((cmp_tok.type != Token::TOK_INT && cmp_tok.type != Token::TOK_CHAR)
+          || addr_tok.type != Token::TOK_INT)
+        {
+          err.err_msg = "First argument must be integer or char. Second argument must be integer.";
+          return false;
+        }
+        else vm.jge(cmp_tok.value, addr_tok.value);
+      }
+      else if (tok.str_value == "jgt")
+      {
+        Token cmp_tok = get_tok(istr);
+        Token addr_tok = get_tok(istr);
+        
+        // If the first argument isn't an int or char, and the second argument isn't an int
+        if ((cmp_tok.type != Token::TOK_INT && cmp_tok.type != Token::TOK_CHAR)
+          || addr_tok.type != Token::TOK_INT)
+        {
+          err.err_msg = "First argument must be integer or char. Second argument must be integer.";
+          return false;
+        }
+        else vm.jgt(cmp_tok.value, addr_tok.value);
+      }
+      else if (tok.str_value == "jle")
+      {
+        Token cmp_tok = get_tok(istr);
+        Token addr_tok = get_tok(istr);
+        
+        // If the first argument isn't an int or char, and the second argument isn't an int
+        if ((cmp_tok.type != Token::TOK_INT && cmp_tok.type != Token::TOK_CHAR)
+          || addr_tok.type != Token::TOK_INT)
+        {
+          err.err_msg = "First argument must be integer or char. Second argument must be integer.";
+          return false;
+        }
+        else vm.jle(cmp_tok.value, addr_tok.value);
+      }
+      else if (tok.str_value == "jlt")
+      {
+        Token cmp_tok = get_tok(istr);
+        Token addr_tok = get_tok(istr);
+        
+        // If the first argument isn't an int or char, and the second argument isn't an int
+        if ((cmp_tok.type != Token::TOK_INT && cmp_tok.type != Token::TOK_CHAR)
+          || addr_tok.type != Token::TOK_INT)
+        {
+          err.err_msg = "First argument must be integer or char. Second argument must be integer.";
+          return false;
+        }
+        else vm.jlt(cmp_tok.value, addr_tok.value);
+      }
+      else if (tok.str_value == "jeq")
+      {
+        Token cmp_tok = get_tok(istr);
+        Token addr_tok = get_tok(istr);
+        
+        // If the first argument isn't an int or char, and the second argument isn't an int
+        if ((cmp_tok.type != Token::TOK_INT && cmp_tok.type != Token::TOK_CHAR)
+          || addr_tok.type != Token::TOK_INT)
+        {
+          err.err_msg = "First argument must be integer or char. Second argument must be integer.";
+          return false;
+        }
+        else vm.jeq(cmp_tok.value, addr_tok.value);
+      }
+      else if (tok.str_value == "jmp")
+      {
+        Token addr_tok = get_tok(istr);
+        
+        // If the first argument isn't an int or char, and the second argument isn't an int
+        if (addr_tok.type != Token::TOK_INT)
+        {
+          err.err_msg = "Argument must be an integer.";
+          return false;
+        }
+        else vm.jmp(addr_tok.value);
+      }
+      else if (tok.str_value == "store")
+      {
+      }
+      else if (tok.str_value == "load")
+      {
       }
       else if (tok.str_value == "pop")
         vm.pop();
@@ -63,6 +154,10 @@ bool parse(std::istream &istr, Sam::VM &vm, Error_State &err)
         vm.out();
       else if (tok.str_value == "dbg")
         vm.dbg();
+      else if (tok.str_value == "sload")
+        vm.sload();
+      else if (tok.str_value == "sstore")
+        vm.sstore();
       else if (tok.str_value == "halt")
         vm.halt();
     }
