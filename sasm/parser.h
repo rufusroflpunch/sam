@@ -130,9 +130,27 @@ bool parse(std::istream &istr, Sam::VM &vm, Error_State &err)
       }
       else if (tok.str_value == "store")
       {
+        Token addr_tok = get_tok(istr);
+        
+        // If the first argument isn't an int or char, and the second argument isn't an int
+        if (addr_tok.type != Token::TOK_INT)
+        {
+          err.err_msg = "Argument must be an integer.";
+          return false;
+        }
+        else vm.store(addr_tok.value);
       }
       else if (tok.str_value == "load")
       {
+        Token addr_tok = get_tok(istr);
+        
+        // If the first argument isn't an int or char, and the second argument isn't an int
+        if (addr_tok.type != Token::TOK_INT)
+        {
+          err.err_msg = "Argument must be an integer.";
+          return false;
+        }
+        else vm.load(addr_tok.value);
       }
       else if (tok.str_value == "pop")
         vm.pop();
