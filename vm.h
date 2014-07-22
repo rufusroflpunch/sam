@@ -32,6 +32,7 @@ public:
   bool save(std::string filename);
   void clear();
   void reset();
+  uint get_ip();
 
   // Instructions
   void push(uint val);

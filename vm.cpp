@@ -38,6 +38,11 @@ void VM::reset()
   memory.clear();
 }
 
+uint VM::get_ip()
+{
+  return ip;
+}
+
 bool VM::cycle()
 {
   uint opcode = code[ip];
@@ -210,6 +215,7 @@ bool VM::cycle()
     addr = mn_stack.top();
     mn_stack.pop();
     val = mn_stack.top();
+    mn_stack.pop();
     alloc(addr);
     memory[addr] = val;
     break;

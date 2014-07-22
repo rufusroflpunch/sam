@@ -8,3 +8,9 @@
 * Complete instruction set
 * Saving and loading of binary executable files
 * samples/ folder with example on API usage
+
+## 0.2
+### TBD
+
+* New VM method: `uint get_ip()`. This method returns the value of the current instruction pointer. This is useful in implementing labels in the assembler.
+* SSTORE now pops the value from the stack that is stored. Previously, it only popped the address but left the value on top of the stack.
