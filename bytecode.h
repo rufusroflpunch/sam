@@ -3,7 +3,7 @@
 #include "vm.h"
 
 #define SAM_BYTECODE_VER 1                      // This is the current version of the bytecode. If any ordering changes are made, or
-                                                // opcodes are added, this should be increased.
+// opcodes are added, this should be increased.
 
 namespace Sam
 {

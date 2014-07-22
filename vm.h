@@ -16,8 +16,9 @@ class VM
 {
 public:
   VM();
-  
-  enum ErrorState {
+
+  enum ErrorState
+  {
     ERR_NONE = 1,
     ERR_INVALID_INS,
     ERR_OPEN_FILE,
@@ -27,7 +28,7 @@ public:
   } error_state;
 
   void execute();                               // Execute the entire code vector
-  
+
   bool load(std::string filename);
   bool save(std::string filename);
   void clear();
@@ -66,7 +67,7 @@ private:
   void vec_to_mem(std::vector<uint> str, uint size, uint addr);      // Store an int vector in program memory at the given address
   void alloc(uint addr);                                        // Allocate new memory up to and including 'addr'
   std::vector<uint> string_to_int(std::string conv);                      // This is a convenience method that convert a C++ string in a vector
-                                                                // of packed integers.
+  // of packed integers.
 
   std::vector<uint> code;            // Bytecode to run
   std::vector<uint> memory;          // Program memory

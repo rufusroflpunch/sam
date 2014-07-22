@@ -18,10 +18,10 @@ void VM::clear()
 {
   ip = 0;
   error_state = ERR_NONE;
-  
+
   // Clear the mn_stack
-  while (!mn_stack.empty()) mn_stack.pop();
-  
+  while(!mn_stack.empty()) mn_stack.pop();
+
   // Clear the code and memory
   memory.clear();
   code.clear();
@@ -31,10 +31,10 @@ void VM::reset()
 {
   ip = 0;
   error_state = ERR_NONE;
-  
+
   // Clear the mn_stack
-  while (!mn_stack.empty()) mn_stack.pop();
-  
+  while(!mn_stack.empty()) mn_stack.pop();
+
   memory.clear();
 }
 
@@ -56,7 +56,7 @@ bool VM::cycle()
 
     if(!mn_stack.empty()) cout << mn_stack.top();
     else cout << "N/A";
-    
+
     cout << "\tOut: ";
   }
 
@@ -172,16 +172,16 @@ bool VM::cycle()
   case OUT:
   {
     uint uint_chars = mn_stack.top();
-    for (int shift = sizeof(uint) * 8 - 8; shift >= 0; shift -= 8)
+    for(int shift = sizeof(uint) * 8 - 8; shift >= 0; shift -= 8)
     {
       char ascii = (char)(uint_chars >> shift);
       // Since a null character (0x00) signals the end of a string in C++, this will short circuit the output of standard out.
       // If it's a null character, don't output that character.
-      if (ascii) cout << ascii;
+      if(ascii) cout << ascii;
     }
     break;
   }
-  
+
   case IN:
   {
     string str;
@@ -196,7 +196,7 @@ bool VM::cycle()
   case DBG:
     cout << hex <<  mn_stack.top() << std::dec << endl;
     break;
-    
+
   case STORE:
     addr = code[ip];
     ip++;
@@ -204,13 +204,13 @@ bool VM::cycle()
     memory[addr] = mn_stack.top();
     mn_stack.pop();
     break;
-    
+
   case LOAD:
     addr = code[ip];
     ip++;
     mn_stack.push(memory[addr]);
     break;
-    
+
   case SSTORE:
     addr = mn_stack.top();
     mn_stack.pop();
@@ -219,7 +219,7 @@ bool VM::cycle()
     alloc(addr);
     memory[addr] = val;
     break;
-    
+
   case SLOAD:
     addr = mn_stack.top();
     mn_stack.pop();
@@ -229,7 +229,7 @@ bool VM::cycle()
   case HALT:
     return false;
   }
-  
+
   return true;
 }
 
@@ -377,7 +377,7 @@ void VM::halt()
  * is an array of 8-bit integers, or "chars". In order to save space and prevent an entire 32-bit integer
  * from being used only by an 8-bit number, this convenience function will pack up to four chars into a
  * single integer, and return the vector representing the array of integers.
- * 
+ *
  * These individual integers can be outputed with the OUT instruction.
 */
 vector<uint> VM::string_to_int(string conv)
@@ -386,22 +386,22 @@ vector<uint> VM::string_to_int(string conv)
   string::iterator it = conv.begin();
   vector<uint> returner;
   uint int_chars = 0;
-  
-  while (shift > 0 && it != conv.end())
+
+  while(shift > 0 && it != conv.end())
   {
     shift -= 8;
     int_chars = int_chars | (*it << shift);
-    
+
     it++;
-    
-    if (shift == 0 || it == conv.end())         // If it reaches the end of the integer or the end of the string
+
+    if(shift == 0 || it == conv.end())          // If it reaches the end of the integer or the end of the string
     {
       shift = sizeof(uint) * 8;                 // Reset for next integer
       returner.push_back(int_chars);            // It must be returned eventually;
       int_chars = 0;
     }
   }
-  
+
   return returner;
 }
 
@@ -409,7 +409,7 @@ void VM::vec_to_mem(vector<uint> str, uint size, uint addr)
 {
   alloc(addr + size);       // Allow an extra integer for the null integer at the end to delimit the string
   memory[addr + size] = 0;  // Null integer
-  for (int i = 0; i < size && i < str.size(); i++)
+  for(int i = 0; i < size && i < str.size(); i++)
   {
     memory[addr + i] = str[i];
   }
@@ -417,34 +417,35 @@ void VM::vec_to_mem(vector<uint> str, uint size, uint addr)
 
 void VM::alloc(uint addr)
 {
-  if (memory.size() <= addr) memory.resize(addr + 1); // Resize the array to include the memory address
+  if(memory.size() <= addr) memory.resize(addr + 1);  // Resize the array to include the memory address
 }
 
 bool VM::save(string filename)
 {
   ofstream outfile;
   outfile.open(filename);
-  
-  if (!outfile.is_open()) { 
+
+  if(!outfile.is_open())
+  {
     error_state = ERR_OPEN_FILE;
     return false;
   }                                             // Exit early on error
-  
+
   // The header
   outfile.put((char)SAM_BYTECODE_VER);          // The first byte is the bytecode version
   outfile.put((char)sizeof(uint));              // The second byte is the uint size (platform-stuff)
-  for (int i = 0; i < 16; i++) outfile.put(0);  // 16 bytes of empty space reserved for future header/file additions
-  
+  for(int i = 0; i < 16; i++) outfile.put(0);   // 16 bytes of empty space reserved for future header/file additions
+
   //Cycle through all integers
-  for (auto it = code.begin(); it != code.end(); it++)
+  for(auto it = code.begin(); it != code.end(); it++)
   {
     // Cycle through every character in the integer
-    for (int shift = sizeof(uint) * 8 - 8; shift >= 0; shift -= 8)
+    for(int shift = sizeof(uint) * 8 - 8; shift >= 0; shift -= 8)
     {
       outfile.put((char)(*it >> shift));
     }
   }
-  
+
   outfile.close();
   return true;
 }
@@ -453,38 +454,42 @@ bool VM::load(string filename)
 {
   ifstream infile;
   infile.open(filename);
-  
-  if (!infile.is_open()) { 
+
+  if(!infile.is_open())
+  {
     error_state = ERR_OPEN_FILE;
     return false;
   }
-  
+
   // Read the header
-  if (infile.get() != SAM_BYTECODE_VER)         // Exit for incorrect bytecode version
+  if(infile.get() != SAM_BYTECODE_VER)          // Exit for incorrect bytecode version
   {
     error_state = ERR_BYTECODE_VER;
     return false;
   }
-  if (infile.get() != sizeof(uint))             // Incorrect int size
+  if(infile.get() != sizeof(uint))              // Incorrect int size
   {
     error_state = ERR_INT_SIZE;
     return false;
   }
-  for (int i = 0; i < 16; i++) infile.get();    // 16 dummy bytes reserved for later used
-  
+  for(int i = 0; i < 16; i++) infile.get();     // 16 dummy bytes reserved for later used
+
   // Read the code
-  while (!infile.eof())
+  while(!infile.eof())
   {
     uint new_int = 0;
-    
-    for (int shift = sizeof(uint) * 8 - 8; shift >= 0; shift -= 8)
+
+    for(int shift = sizeof(uint) * 8 - 8; shift >= 0; shift -= 8)
     {
       unsigned char read_char = infile.get();
-      if (!infile.fail()) { new_int |= ((uint)(read_char) << shift); }
+      if(!infile.fail())
+      {
+        new_int |= ((uint)(read_char) << shift);
+      }
     }
-    
+
     code.push_back(new_int);
   }
-  
+
   return true;
 }
