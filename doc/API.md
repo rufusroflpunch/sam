@@ -3,7 +3,7 @@
 
 Sam is a stack-based virtual machine written in standards-compliant C++. It's written in a way as to be entirely platform independent.
 
-The basic package is three simple files: `bytecode.h`, the file that defines the various base instructions of the virtual machine. `vm.h` and `vm.cpp` define the virtual machine logic. While you certainly can go through the trouble of compiling a separate binary if you like, it would probably just be easer to include these as part of your project.
+The basic package is two simple files: `bytecode.h`, the file that defines the various base instructions of the virtual machine. `vm.h` defines the virtual machine logic. This is a header-only library.
 
 ###Usage
 Let's examine a piece of code:

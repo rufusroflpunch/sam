@@ -7,11 +7,7 @@
 #include <iostream>
 #include <fstream>
 
-// #include "vm.h"
 #include "bytecode.h"
-
-// using namespace std;
-// using namespace Sam;
 
 namespace Sam
 {
