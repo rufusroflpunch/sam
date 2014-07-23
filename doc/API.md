@@ -188,7 +188,3 @@ This pops the top integer off the stack and uses it as an address to load from a
 ####HALT
 `vm.halt()`  
 Ceases execution of the application.
-
-### The Future
-
-I would like to create a separate assembler and assembly language. Potentially, it would be a nice learning excercise to implement a higher level programming language on top of the virtual machine.
