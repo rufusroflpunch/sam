@@ -15,4 +15,5 @@ doc/CHANGELOG.md    Current changelog.
 doc/INSTALL.md      Build information.
 sasm/*              Project files for the Sasm assembler and sasm-run to run assembled binaries.
 samples/*           C++ sample files to demonstrate usage of the Sam API.
+tests/*             Unit tests.
 ```
