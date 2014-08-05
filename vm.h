@@ -33,6 +33,7 @@ public:
   void clear();
   void reset();
   uint get_ip();
+  uint peek();
 
   // Instructions
   void push(uint val);
@@ -63,10 +64,10 @@ public:
 
 private:
   bool cycle();                                                 // Execute one CPU cycle
-  void vec_to_mem(std::vector<uint> str, uint size, uint addr);      // Store an int vector in program memory at the given address
+  void vec_to_mem(std::vector<uint> str, uint size, uint addr); // Store an int vector in program memory at the given address
   void alloc(uint addr);                                        // Allocate new memory up to and including 'addr'
-  std::vector<uint> string_to_int(std::string conv);                      // This is a convenience method that convert a C++ string in a vector
-  // of packed integers.
+  std::vector<uint> string_to_int(std::string conv);            // This is a convenience method that convert a C++ string in a vector
+                                                                // of packed integers.
 
   std::vector<uint> code;            // Bytecode to run
   std::vector<uint> memory;          // Program memory
@@ -110,6 +111,12 @@ void VM::reset()
 uint VM::get_ip()
 {
   return ip;
+}
+
+// Peek at the top of the stack without popping it
+uint VM::peek()
+{
+  return mn_stack.top();
 }
 
 bool VM::cycle()
