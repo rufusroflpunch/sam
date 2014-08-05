@@ -1,7 +1,14 @@
 # CHANGELOG
 
+## 0.2.1
+### 8/4/14
+
+* Added `uint peek()` function to the C++ API, which returns the current top value of the stack.
+* Added unit tests. Can be built/run using make target 'run_tests'.
+* Added a better build system for the samples, tests, assembler and runner, using CMake.
+
 ## 0.2
-### 7/22/13
+### 7/22/14
 
 * Sam is now a header-only library! No need to link any files anymore. Just `#include <vm.h>` and you are good to go!
 * Added an assembler under the folder sasm/ as well as an application to run Sam binaries. You can now write assembly text files instead of writing C++ to use the VM!
@@ -13,7 +20,7 @@ Coming Soon:
 * Labels for jumping in sasm files.
 
 ## 0.1
-### 07/19/2014
+### 7/19/14
 
 * Initial public release
 * Contains code for a standards-compliant C++ virtual machine, uses for generic purposes.

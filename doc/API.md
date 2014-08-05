@@ -94,6 +94,9 @@ Clear's the virtual machine completely. This includes the stack, program memory,
 `void reset()`  
 Reboots the virtual machine back to default position with the current instruction set.
 
+`uint peek()`
+Returns the current top value of the stack.
+
 ###Instruction Set
 Time for the juicy stuff! Here are all of the available instructions:
 
