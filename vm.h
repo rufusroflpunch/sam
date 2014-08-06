@@ -7,10 +7,42 @@
 #include <iostream>
 #include <fstream>
 
-#include "bytecode.h"
+#define SAM_BYTECODE_VER 1 // This is the current version of the bytecode. If any ordering changes are made, or
+                           // opcodes are added, this should be increased.
+
+#define SAM_MAJOR_VER 0    // This represents the current version of the Sam VM.
+#define SAM_MINOR_VER 2
+#define SAM_REVISION 1
 
 namespace Sam
 {
+enum Bytecode
+{
+  PUSH = 1,
+  POP,
+  ADD,
+  SUB,
+  MUL,
+  DIV,
+  MOD,
+  INC,
+  DEC,
+  JGE,
+  JGT,
+  JLE,
+  JLT,
+  JEQ,
+  JMP,
+  OUT,
+  IN,
+  DBG,
+  STORE,
+  LOAD,
+  SSTORE,
+  SLOAD,
+  HALT
+};
+
 class VM
 {
 public:
