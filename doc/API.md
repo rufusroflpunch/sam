@@ -76,6 +76,8 @@ Each virtual machine contains the state variable `error_state` which is useful i
 * ERR_OPEN_FILE: Error opening file with load or save.
 * ERR_BYTECODE_VER: The file to open was written in a different bytecode set.
 * ERR_INT_SIZE: The file uses a different base int size than your machine.
+* ERR_READ_FAIL: Trouble reading the file to load.
+* ERR_POP_FAIL: The stack was empty when popping was attempted.
 
 The virtual machines have several member functions:
 
@@ -94,8 +96,11 @@ Clear's the virtual machine completely. This includes the stack, program memory,
 `void reset()`  
 Reboots the virtual machine back to default position with the current instruction set.
 
-`uint peek()`
+`uint peek()`  
 Returns the current top value of the stack.
+
+`bool stack_pop()`  
+This pops the stack in a way that stops segfaults. If it fails, it returns `false` and sets the error_state flag to ERR_POP_FAIL.
 
 ###Instruction Set
 Time for the juicy stuff! Here are all of the available instructions:

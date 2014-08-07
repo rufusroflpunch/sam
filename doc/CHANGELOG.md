@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.2.2
+### TBD
+
+* Merged bytecode.h and vm.h so there is only one header now.
+* Added API call stack_pop(). This does error checking before popping the stack to prevent
+  segfaults.
+
 ## 0.2.1
 ### 8/4/14
 
