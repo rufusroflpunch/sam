@@ -8,7 +8,7 @@
 #include <fstream>
 
 #define SAM_BYTECODE_VER 1 // This is the current version of the bytecode. If any ordering changes are made, or
-                           // opcodes are added, this should be increased.
+// opcodes are added, this should be increased.
 
 #define SAM_MAJOR_VER 0    // This represents the current version of the Sam VM.
 #define SAM_MINOR_VER 2
@@ -101,7 +101,7 @@ private:
   void vec_to_mem(std::vector<uint> str, uint size, uint addr); // Store an int vector in program memory at the given address
   void alloc(uint addr);                                        // Allocate new memory up to and including 'addr'
   std::vector<uint> string_to_int(std::string conv);            // This is a convenience method that convert a C++ string in a vector
-                                                                // of packed integers.
+  // of packed integers.
 
   std::vector<uint> code;            // Bytecode to run
   std::vector<uint> memory;          // Program memory
@@ -156,7 +156,7 @@ uint VM::peek()
 // Pop the top value of the stack. If it fails because it's empty, set the error_state
 bool VM::stack_pop()
 {
-  if (mn_stack.empty())
+  if(mn_stack.empty())
   {
     error_state = ERR_POP_FAIL;
     return false;

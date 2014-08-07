@@ -18,7 +18,7 @@ int main()
   // though the characters are only 8-bit
 
   std::string hello = "hello world\n";
-  for (auto it = hello.begin(); it != hello.end(); it++)
+  for(auto it = hello.begin(); it != hello.end(); it++)
   {
     vm.push(*it);
     vm.out();

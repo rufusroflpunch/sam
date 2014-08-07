@@ -39,18 +39,18 @@ void print_help()
 {
   // Since both dry_run and dry_run_benchmark can process --help and show this help screen,
   // this static variable ensure that typing --help will only run this once and not twice.
-  static bool already_printed = false;  
-  if (!already_printed)
+  static bool already_printed = false;
+  if(!already_printed)
     std::cout << "Dry Run " << DRY_RUN_MAJ_VER << "." << DRY_RUN_MIN_VER << "\n"
-            "Usage: test [options]\n"
-            "Options:\n\n"
-            "-d\t\tRun tests in determinate mode (non-randomized).\n"
-            "-r\t\tRepeat tests multiple times. Ex: test -r 10\n"
-            "-h,--help\tShow this help screen.\n"
-            "-c\t\tUse ANSI colors for easier reading.\n"
-            "-b\t\tShow brief output (less verbose).\n"
-            "-B\t\tRun only benchmarks.\n"
-            "-T\t\tRun only tests.\n\n";
+              "Usage: test [options]\n"
+              "Options:\n\n"
+              "-d\t\tRun tests in determinate mode (non-randomized).\n"
+              "-r\t\tRepeat tests multiple times. Ex: test -r 10\n"
+              "-h,--help\tShow this help screen.\n"
+              "-c\t\tUse ANSI colors for easier reading.\n"
+              "-b\t\tShow brief output (less verbose).\n"
+              "-B\t\tRun only benchmarks.\n"
+              "-T\t\tRun only tests.\n\n";
   already_printed = true;
 }
 
@@ -97,7 +97,7 @@ struct test_suite
   std::function<void ()> before_func, before_each_func;
   std::function<void ()> after_func, after_each_func;
 
-  /** The method used to add runnable tests. 
+  /** The method used to add runnable tests.
    * @param   desc    A string description (typically short) to describe the test.
    * @param   test    A function object, usually a C++11 lambda, that returns a bool.
    */
@@ -194,9 +194,9 @@ void dry_run(int argc, char** argv, test_suite& tests)
   {
     if(std::string(argv[i]) == "-d") determinate = true;
     else if(std::string(argv[i]) == "-r") repeat = std::stoi(std::string(argv[++i]));
-    else if (std::string(argv[i]) == "-c") colors = true;
-    else if (std::string(argv[i]) == "-b") brief = true;
-    else if (std::string(argv[i]) == "-B") bench_only = true;
+    else if(std::string(argv[i]) == "-c") colors = true;
+    else if(std::string(argv[i]) == "-b") brief = true;
+    else if(std::string(argv[i]) == "-B") bench_only = true;
     else if(std::string(argv[i]) == "-h" || std::string(argv[i]) == "--help")
     {
       print_help();
@@ -205,10 +205,10 @@ void dry_run(int argc, char** argv, test_suite& tests)
   }
 
   // Quit if there are no tests to run, or running only benchmarks.
-  if (tests.test_list.empty() || bench_only) return;
+  if(tests.test_list.empty() || bench_only) return;
 
   // Execute the command that is run before the entire suite.
-  if (tests.before_func)
+  if(tests.before_func)
   {
     tests.before_func();
   }
@@ -229,32 +229,32 @@ void dry_run(int argc, char** argv, test_suite& tests)
   if(!determinate) std::random_shuffle(tests.test_list.begin(), tests.test_list.end());
 
   // Print test header
-  if (colors) std::cout << COLOR_MAGENTA;
-  if (!brief) std::cout << "Tests:\n";
-  if (colors) std::cout << COLOR_OFF;
+  if(colors) std::cout << COLOR_MAGENTA;
+  if(!brief) std::cout << "Tests:\n";
+  if(colors) std::cout << COLOR_OFF;
 
   // Conduct the actual tests.
   std::vector<test_case> failures;
   for(auto it : tests.test_list)
   {
-    if (tests.before_each_func)
+    if(tests.before_each_func)
     {
       tests.before_each_func();
     }
     if(it.test())
     {
-      if (colors) std::cout << COLOR_GREEN;
+      if(colors) std::cout << COLOR_GREEN;
       std::cout << ".";
-      if (colors) std::cout << COLOR_OFF;
+      if(colors) std::cout << COLOR_OFF;
     }
     else
     {
-      if (colors) std::cout << COLOR_RED;
+      if(colors) std::cout << COLOR_RED;
       std::cout << "F";
       std::cout << COLOR_OFF;
       failures.push_back(it);
     }
-    if (tests.after_each_func)
+    if(tests.after_each_func)
     {
       tests.after_each_func();
     }
@@ -262,7 +262,7 @@ void dry_run(int argc, char** argv, test_suite& tests)
   std::cout << "\n\n";
 
   // Execute the after command
-  if (tests.after_func)
+  if(tests.after_func)
   {
     tests.after_func();
   }
@@ -272,21 +272,21 @@ void dry_run(int argc, char** argv, test_suite& tests)
   {
     std::sort(failures.begin(), failures.end());
     auto uniq_end = std::unique(failures.begin(), failures.end());
-    if (colors) std::cout << COLOR_MAGENTA;
+    if(colors) std::cout << COLOR_MAGENTA;
     std::cout << "Failures: " << std::endl;
-    if (colors) std::cout << COLOR_OFF;
+    if(colors) std::cout << COLOR_OFF;
     for(auto it = failures.begin(); it != uniq_end; it++)
     {
-      if (colors) std::cout << COLOR_RED;
+      if(colors) std::cout << COLOR_RED;
       std::cout << it->desc << std::endl;
-      if (colors) std::cout << COLOR_OFF;
+      if(colors) std::cout << COLOR_OFF;
     }
   }
   else    // If there are no failure, let us know.
   {
-    if (colors) std::cout << COLOR_GREEN;
-    if (!brief) std::cout << "All Passed.";
-    if (colors) std::cout << COLOR_OFF;
+    if(colors) std::cout << COLOR_GREEN;
+    if(!brief) std::cout << "All Passed.";
+    if(colors) std::cout << COLOR_OFF;
   }
 
   std::cout << "\n\n";
@@ -302,7 +302,7 @@ void dry_run(int argc, char** argv, test_suite& tests)
  * @param   argv    Passed in from main.
  * @param   tests   The bench_suite created that contains the actual tests to run.
  */
-void dry_run_benchmarks(int argc, char **argv, bench_suite &benchmarks)
+void dry_run_benchmarks(int argc, char** argv, bench_suite& benchmarks)
 {
   bool colors = false;
   bool test_only = false;
@@ -311,9 +311,9 @@ void dry_run_benchmarks(int argc, char **argv, bench_suite &benchmarks)
   // Parse cmd line args.
   for(int i = 0; i < argc; i++)
   {
-    if (std::string(argv[i]) == "-c") colors = true;
-    else if (std::string(argv[i]) == "-T") test_only = true;
-    else if (std:: string(argv[i]) == "-b") brief = true;
+    if(std::string(argv[i]) == "-c") colors = true;
+    else if(std::string(argv[i]) == "-T") test_only = true;
+    else if(std:: string(argv[i]) == "-b") brief = true;
     else if(std::string(argv[i]) == "-h" || std::string(argv[i]) == "--help")
     {
       print_help();
@@ -322,28 +322,28 @@ void dry_run_benchmarks(int argc, char **argv, bench_suite &benchmarks)
   }
 
   // Exit if there are no benchmarks to run, or running only tests.
-  if (benchmarks.bench_list.empty() || test_only) return;
+  if(benchmarks.bench_list.empty() || test_only) return;
 
-  if (colors) std::cout << COLOR_MAGENTA;
-  if (!brief) std::cout << "Benchmarks:" << std::endl;
-  if (colors) std::cout << COLOR_OFF;
-  if (!brief) std::cout << "TIME\t\t\tREPETITIONS\tDESCRIPTION\n\n";
+  if(colors) std::cout << COLOR_MAGENTA;
+  if(!brief) std::cout << "Benchmarks:" << std::endl;
+  if(colors) std::cout << COLOR_OFF;
+  if(!brief) std::cout << "TIME\t\t\tREPETITIONS\tDESCRIPTION\n\n";
 
   // Actually execute the benchmarks.
-  for (auto i : benchmarks.bench_list)
+  for(auto i : benchmarks.bench_list)
   {
     std::chrono::time_point<std::chrono::system_clock> start, end;
     start = std::chrono::system_clock::now();
 
-    for (int count = i.reps; count > 0; count --)
+    for(int count = i.reps; count > 0; count --)
       i.test();
 
     end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end - start;
 
-    if (colors) std::cout << COLOR_GREEN;
+    if(colors) std::cout << COLOR_GREEN;
     std::cout << elapsed_seconds.count() << "s";
-    if (colors) std::cout << COLOR_OFF;
+    if(colors) std::cout << COLOR_OFF;
     std::cout << "\t\t" << i.reps << "\t\t" << i.desc << std::endl;
   }
 
