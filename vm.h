@@ -12,7 +12,7 @@
 
 #define SAM_MAJOR_VER 0    // This represents the current version of the Sam VM.
 #define SAM_MINOR_VER 2
-#define SAM_REVISION 1
+#define SAM_REVISION 2
 
 namespace Sam
 {
@@ -55,7 +55,8 @@ public:
     ERR_OPEN_FILE,
     ERR_BYTECODE_VER,
     ERR_INT_SIZE,
-    ERR_READ_FAIL
+    ERR_READ_FAIL,
+    ERR_POP_FAIL
   } error_state;
 
   void execute();                               // Execute the entire code vector
@@ -66,6 +67,7 @@ public:
   void reset();
   uint get_ip();
   uint peek();
+  bool stack_pop();
 
   // Instructions
   void push(uint val);
@@ -122,7 +124,7 @@ void VM::clear()
   error_state = ERR_NONE;
 
   // Clear the mn_stack
-  while(!mn_stack.empty()) mn_stack.pop();
+  while(!mn_stack.empty()) stack_pop();
 
   // Clear the code and memory
   memory.clear();
@@ -135,7 +137,7 @@ void VM::reset()
   error_state = ERR_NONE;
 
   // Clear the mn_stack
-  while(!mn_stack.empty()) mn_stack.pop();
+  while(!mn_stack.empty()) stack_pop();
 
   memory.clear();
 }
@@ -149,6 +151,21 @@ uint VM::get_ip()
 uint VM::peek()
 {
   return mn_stack.top();
+}
+
+// Pop the top value of the stack. If it fails because it's empty, set the error_state
+bool VM::stack_pop()
+{
+  if (mn_stack.empty())
+  {
+    error_state = ERR_POP_FAIL;
+    return false;
+  }
+  else
+  {
+    mn_stack.pop();
+  }
+  return true;
 }
 
 bool VM::cycle()
@@ -176,59 +193,59 @@ bool VM::cycle()
     break;
 
   case POP:
-    mn_stack.pop();
+    stack_pop();
     break;
 
   case ADD:
     val = mn_stack.top();
-    mn_stack.pop();
+    stack_pop();
     val += mn_stack.top();
-    mn_stack.pop();
+    stack_pop();
     mn_stack.push(val);
     break;
 
   case SUB:
     val = mn_stack.top();
-    mn_stack.pop();
+    stack_pop();
     val -= mn_stack.top();
-    mn_stack.pop();
+    stack_pop();
     mn_stack.push(val);
     break;
 
   case MUL:
     val = mn_stack.top();
-    mn_stack.pop();
+    stack_pop();
     val *= mn_stack.top();
-    mn_stack.pop();
+    stack_pop();
     mn_stack.push(val);
     break;
 
   case DIV:
     val = mn_stack.top();
-    mn_stack.pop();
+    stack_pop();
     val /= mn_stack.top();
-    mn_stack.pop();
+    stack_pop();
     mn_stack.push(val);
     break;
 
   case MOD:
     val = mn_stack.top();
-    mn_stack.pop();
+    stack_pop();
     val %= mn_stack.top();
-    mn_stack.pop();
+    stack_pop();
     mn_stack.push(val);
     break;
 
   case INC:
     val = mn_stack.top();
-    mn_stack.pop();
+    stack_pop();
     val++;
     mn_stack.push(val);
     break;
 
   case DEC:
     val = mn_stack.top();
-    mn_stack.pop();
+    stack_pop();
     val--;
     mn_stack.push(val);
     break;
@@ -310,7 +327,7 @@ bool VM::cycle()
     ip++;
     alloc(addr); // Make sure there is enough memory
     memory[addr] = mn_stack.top();
-    mn_stack.pop();
+    stack_pop();
     break;
 
   case LOAD:
@@ -321,16 +338,16 @@ bool VM::cycle()
 
   case SSTORE:
     addr = mn_stack.top();
-    mn_stack.pop();
+    stack_pop();
     val = mn_stack.top();
-    mn_stack.pop();
+    stack_pop();
     alloc(addr);
     memory[addr] = val;
     break;
 
   case SLOAD:
     addr = mn_stack.top();
-    mn_stack.pop();
+    stack_pop();
     mn_stack.push(memory[addr]);
     break;
 
